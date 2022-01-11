@@ -1,14 +1,14 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-
+#include <raspicam/raspicam_cv.h>
 
 int main(int argc, char *argv[])
 {
-    cv::VideoCapture cap;
-    cap.open(argv[1]);
-    if (!cap.isOpened())
+    raspicam::RaspiCam_Cv cam;
+    cam.set( cv::CAP_PROP_FORMAT, CV_8UC1 );
+    if (!cam.open())
     {
-        std::cerr << "Impossible to open " << argv[1] << std::endl;
+        std::cerr << "Can't open raspi camera." << std::endl;
         return -1;
     }
     int iLowH = 170;
@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
     cv::Mat frame;
     for (;;)
     {
-        cap >> frame;
+        cam.grab();
+        cam.retrieve(frame);
         if (frame.empty())
         {
             break;
@@ -196,6 +197,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    cam.release();
     cv::destroyWindow("Video");
     return 1;
 }
