@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
         std::cout << ": " << ((frame.size().width - redDist) + (frame.size().width - yelDist)) / 100 << std::endl;
         */
         double diff = rightDist - leftDist;
-        std::cout << diff << " ";
+        std::cout << diff;
         if (diff < -50)
         {
             std::cout << "L" << std::endl;
