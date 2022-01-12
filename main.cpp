@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
     int iLowV = 60;
     int iHighV = 255;
 
-    int iLowHY = 40;
-    int iHighHY = 70;
+    int iLowHY = 20;
+    int iHighHY = 80;
 
     int iLowSY = 100;
     int iHighSY = 255;
