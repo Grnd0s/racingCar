@@ -2,6 +2,8 @@
 #include <opencv2/opencv.hpp>
 #include <raspicam/raspicam_cv.h>
 
+#define FRAME_RATE 10
+
 int main(int argc, char *argv[])
 {
     raspicam::RaspiCam_Cv cam;
@@ -32,6 +34,7 @@ int main(int argc, char *argv[])
     cv::namedWindow("Video", cv::WINDOW_NORMAL);
     cv::resizeWindow("Video", 1280, 720);
     cv::Mat frame;
+    int frameCounter = 0;
     for (;;)
     {
         cam.grab();
@@ -152,48 +155,34 @@ int main(int argc, char *argv[])
 
         cv::circle(frame, cv::Point(yelX, yelY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
         cv::putText(frame, "Right", cv::Point(yelX, yelY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
-        //std::cout << "dist: " << yelDist << " max dist: " << maxDist  << "dv: " << static_cast<int>(5 * std::abs(yelDist)/maxDist + 1) << std::endl;
         
         cv::arrowedLine(frame, cv::Point(yelX, yelY), cv::Point(centerX, centerY), cv::Scalar(30, 255, 255), static_cast<int>(5 * std::abs(yelDist)/maxDist + 1));
 
-       //std::cout << "Left: " << redDist << " Right: " << yelDist << std::endl;
         double rightDist = std::sqrt(std::pow(centerX - yelX, 2) + std::pow(centerY - yelY, 2));
         double leftDist = std::sqrt(std::pow(centerX - redX, 2) + std::pow(centerY - redY, 2));
-        /*if (redDist > 250 && rightDist > 250)
-        {
-            std::cout << "Forward";
-        }
-        else if (redDist > 250 && yelDist < 250)
-        {
-            std::cout << "Left";
-        }
-        else if (redDist < 250 && yelDist > 250)
-        {
-            std::cout << "Right";
-        }
-        std::cout << ": " << ((frame.size().width - redDist) + (frame.size().width - yelDist)) / 100 << std::endl;
-        */
         double diff = rightDist - leftDist;
-        if (diff > 150 && diff < -150)
-        {
-            continue;
-        }
-        std::cout << diff;
+        char order = 'S';
+
         if (diff < -50)
         {
-            std::cout << "L" << std::endl;
+            order = 'L';
             cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
 
         }
         else if (diff > 50)
         {
-            std::cout << "R" << std::endl;
+            order = 'R';
             cv::putText(frame, "Right", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
         }
         else
         {
-            std::cout << "F" << std::endl;
+            order = 'F';
             cv::putText(frame, "Forward", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+        }
+
+        if (frameCounter % FRAME_RATE == 0)
+        {
+            std::cout << diff << order << std::endl;
         }
 
         cv::imshow("Video", frame);
@@ -201,6 +190,7 @@ int main(int argc, char *argv[])
         {
             break;
         }
+        frameCounter++;
     }
     cam.release();
     cv::destroyWindow("Video");
