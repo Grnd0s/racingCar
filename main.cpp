@@ -5,7 +5,7 @@
 int main(int argc, char *argv[])
 {
     raspicam::RaspiCam_Cv cam;
-    cam.set( cv::CAP_PROP_FORMAT, CV_8UC1 );
+    cam.set( cv::CAP_PROP_FORMAT, CV_8UC3 );
     if (!cam.open())
     {
         std::cerr << "Can't open raspi camera." << std::endl;
