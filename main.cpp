@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     int iLowVY = 100;
     int iHighVY = 255;
 
-    cv::namedWindow("Video", cv::WINDOW_FULLSCREEN);
+    cv::namedWindow("Video", cv::WINDOW_NORMAL);
+    cv::resizeWindow("Video", 1280, 720);
     cv::Mat frame;
     for (;;)
     {
@@ -173,6 +174,10 @@ int main(int argc, char *argv[])
         std::cout << ": " << ((frame.size().width - redDist) + (frame.size().width - yelDist)) / 100 << std::endl;
         */
         double diff = rightDist - leftDist;
+        if (diff > 150 && diff < -150)
+        {
+            continue;
+        }
         std::cout << diff;
         if (diff < -50)
         {
