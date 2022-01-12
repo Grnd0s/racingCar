@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 
         if (frameCounter % FRAME_RATE == 0)
         {
-            std::cout << diff << order << std::endl;
+            std::cout << std::abs(diff) << order << std::endl;
         }
 
         cv::imshow("Video", frame);
