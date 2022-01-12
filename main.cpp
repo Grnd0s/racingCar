@@ -173,21 +173,21 @@ int main(int argc, char *argv[])
         std::cout << ": " << ((frame.size().width - redDist) + (frame.size().width - yelDist)) / 100 << std::endl;
         */
         double diff = rightDist - leftDist;
-        std::cout << "Dist: " << diff << " ";
+        std::cout << diff << " ";
         if (diff < -50)
         {
-            std::cout << "Left" << std::endl;
+            std::cout << "L" << std::endl;
             cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
 
         }
         else if (diff > 50)
         {
-            std::cout << "Right" << std::endl;
+            std::cout << "R" << std::endl;
             cv::putText(frame, "Right", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
         }
         else
         {
-            std::cout << "Forward" << std::endl;
+            std::cout << "F" << std::endl;
             cv::putText(frame, "Forward", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
         }
 
