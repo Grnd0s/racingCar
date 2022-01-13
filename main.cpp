@@ -134,21 +134,21 @@ int main(int argc, char *argv[])
     cv::resizeWindow("Video", 1280, 720);
     
         // Trackbars to set thresholds for HSV values
-    cv::createTrackbar("Low H Red", "Config", nullptr, max_value_H, on_low_H_Red_trackbar);
-    cv::createTrackbar("High H Red", "Config",nullptr, max_value_H, on_high_H_Red_trackbar);
-    cv::createTrackbar("Low S Red", "Config", nullptr, max_value, on_low_S_Red_trackbar);
-    cv::createTrackbar("High S Red", "Config", nullptr, max_value, on_high_S_Red_trackbar);
-    cv::createTrackbar("Low V Red", "Config", nullptr, max_value, on_low_V_Red_trackbar);
-    cv::createTrackbar("High V Red", "Config", nullptr,max_value, on_high_V_Red_trackbar);
+    cv::createTrackbar("Low H Red", "Config", nullptr, max_value_H, nullptr);//on_low_H_Red_trackbar);
+    cv::createTrackbar("High H Red", "Config",nullptr, max_value_H, nullptr);//on_high_H_Red_trackbar);
+    cv::createTrackbar("Low S Red", "Config", nullptr, max_value, nullptr);//on_low_S_Red_trackbar);
+    cv::createTrackbar("High S Red", "Config", nullptr, max_value, nullptr);//on_high_S_Red_trackbar);
+    cv::createTrackbar("Low V Red", "Config", nullptr, max_value, nullptr);//on_low_V_Red_trackbar);
+    cv::createTrackbar("High V Red", "Config", nullptr,max_value, nullptr);//on_high_V_Red_trackbar);
     
-    cv::createTrackbar("Low H Yel", "Config", nullptr, max_value_H, on_low_H_Yel_trackbar);
-    cv::createTrackbar("High H Yel", "Config", nullptr, max_value_H, on_high_H_Yel_trackbar);
-    cv::createTrackbar("Low S Yel", "Config", nullptr, max_value, on_low_S_Yel_trackbar);
-    cv::createTrackbar("High S Yel", "Config", nullptr, max_value, on_high_S_Yel_trackbar);
-    cv::createTrackbar("Low V Yel", "Config", nullptr, max_value, on_low_V_Yel_trackbar);
-    cv::createTrackbar("High V Yel", "Config", nullptr, max_value, on_high_V_Yel_trackbar);
-    cv::createTrackbar("diffLeft", "Config", nullptr, 500, on_diffLeft_trackbar);
-    cv::createTrackbar("diffRight", "Config", nullptr, 500, on_diffRight_trackbar);
+    cv::createTrackbar("Low H Yel", "Config", nullptr, max_value_H, nullptr);//on_low_H_Yel_trackbar);
+    cv::createTrackbar("High H Yel", "Config", nullptr, max_value_H, nullptr);//on_high_H_Yel_trackbar);
+    cv::createTrackbar("Low S Yel", "Config", nullptr, max_value, nullptr);//on_low_S_Yel_trackbar);
+    cv::createTrackbar("High S Yel", "Config", nullptr, max_value, nullptr);//on_high_S_Yel_trackbar);
+    cv::createTrackbar("Low V Yel", "Config", nullptr, max_value, nullptr);//on_low_V_Yel_trackbar);
+    cv::createTrackbar("High V Yel", "Config", nullptr, max_value, nullptr);//on_high_V_Yel_trackbar);
+    cv::createTrackbar("diffLeft", "Config", nullptr, 500, nullptr);//on_diffLeft_trackbar);
+    cv::createTrackbar("diffRight", "Config", nullptr, 500, nullptr);//on_diffRight_trackbar);
 
     cv::setTrackbarPos("Low H Red", "Config", low_HRed);    
     cv::setTrackbarPos("High H Red", "Config", high_HRed);    
