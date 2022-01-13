@@ -80,11 +80,11 @@ static void on_high_V_Yel_trackbar(int, void *)
 //Diff params
 static void on_diffLeft_trackbar(int, void *)
 {
-    cv::setTrackbarPos("Diff Left", "Config", diffLeft);
+    cv::setTrackbarPos("diffLeft", "Config", diffLeft);
 }
 static void on_diffRight_trackbar(int, void *)
 {
-    cv::setTrackbarPos("Diff Right", "Config", diffRight);
+    cv::setTrackbarPos("diffRight", "Config", diffRight);
 }
 
 
