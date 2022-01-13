@@ -151,11 +151,11 @@ int main(int argc, char *argv[])
     cv::createTrackbar("diffRight", "Config", nullptr, 300, on_diffRight_trackbar);
 
     cv::setTrackbarPos("Low H Red", "Config", low_HRed);    
-    cv::setTrackbarPos("High H Red", "Config", low_HRed);    
-    cv::setTrackbarPos("Low S Red", "Config", low_HRed);    
-    cv::setTrackbarPos("High S Red", "Config", low_HRed);    
-    cv::setTrackbarPos("Low V Red", "Config", low_HRed);    
-    cv::setTrackbarPos("High V Red", "Config", low_HRed);    
+    cv::setTrackbarPos("High H Red", "Config", high_HRed);    
+    cv::setTrackbarPos("Low S Red", "Config", low_SRed);    
+    cv::setTrackbarPos("High S Red", "Config", high_SRed);    
+    cv::setTrackbarPos("Low V Red", "Config", low_VRed);    
+    cv::setTrackbarPos("High V Red", "Config", high_VRed);    
     
     cv::setTrackbarPos("Low H Yel", "Config", low_HYel);    
     cv::setTrackbarPos("High H Yel", "Config", high_HYel);    
@@ -171,6 +171,21 @@ int main(int argc, char *argv[])
     int frameCounter = 0;
     for (;;)
     {
+        low_HRed = cv::getTrackbarPos("Low H Red", "Config");
+        high_HRed = cv::getTrackbarPos("High H Red", "Config");
+        low_SRed = cv::getTrackbarPos("Low S Red", "Config");
+        high_SRed = cv::getTrackbarPos("High S Red", "Config");
+        low_VRed = cv::getTrackbarPos("Low V Red", "Config");
+        high_VRed = cv::getTrackbarPos("High V Red", "Config");
+        low_HYel = cv::getTrackbarPos("Low H Yel", "Config");
+        high_HYel = cv::getTrackbarPos("High H Yel", "Config");
+        low_SYel = cv::getTrackbarPos("Low S Yel", "Config");
+        high_SYel = cv::getTrackbarPos("High S Yel", "Config");
+        low_VYel = cv::getTrackbarPos("Low V Yel", "Config");
+        high_VYel = cv::getTrackbarPos("High V Yel", "Config");
+        diffLeft = cv::getTrackbarPos("diffLeft", "Config");
+        diffRight = cv::getTrackbarPos("diffRight", "Config");
+        
         cam.grab();
         cam.retrieve(frame);
         if (frame.empty())
