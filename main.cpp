@@ -1,8 +1,93 @@
 #include <iostream>
+#include <fstream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 
 #define FRAME_RATE 10
+
+const int max_value_H = 360/2;
+const int max_value = 255;
+int low_HRed = 0, low_SRed = 0, low_VRed = 0;
+int high_HRed = max_value_H, high_SRed = max_value, high_VRed = max_value;
+int low_HYel = 0, low_SYel = 0, low_VYel = 0;
+int high_HYel = max_value_H, high_SYel = max_value, high_VYel = max_value;
+int diffLeft = -50;
+int diffRight = 50;
+
+//Red Trackbar
+static void on_low_H_Red_trackbar(int, void *)
+{
+    low_HRed = cv::min(high_HRed-1, low_HRed);
+    cv::setTrackbarPos("Low H Red", "Video", low_HRed);
+}
+static void on_high_H_Red_trackbar(int, void *)
+{
+    high_HRed = cv::max(high_HRed, low_HRed+1);
+    cv::setTrackbarPos("High H Red", "Video", high_HRed);
+}
+static void on_low_S_Red_trackbar(int, void *)
+{
+    low_SRed = cv::min(high_SRed-1, low_SRed);
+    cv::setTrackbarPos("Low S Red", "Video", low_SRed);
+}
+static void on_high_S_Red_trackbar(int, void *)
+{
+    high_SRed = cv::max(high_SRed, low_SRed+1);
+    cv::setTrackbarPos("High S Red", "Video", high_SRed);
+}
+static void on_low_V_Red_trackbar(int, void *)
+{
+    low_VRed = cv::min(high_VRed-1, low_VRed);
+    cv::setTrackbarPos("Low V Red", "Video", low_VRed);
+}
+static void on_high_V_Red_trackbar(int, void *)
+{
+    high_VRed = cv::max(high_VRed, low_VRed+1);
+    cv::setTrackbarPos("High V Red", "Video", high_VRed);
+}
+//Yellow Trackbar
+static void on_low_H_Yel_trackbar(int, void *)
+{
+    low_HYel = cv::min(high_HYel-1, low_HYel);
+    cv::setTrackbarPos("Low H Yel", "Video", low_HYel);
+}
+static void on_high_H_Yel_trackbar(int, void *)
+{
+    high_HYel = cv::max(high_HYel, low_HYel+1);
+    cv::setTrackbarPos("High H Yel", "Video", high_HYel);
+}
+static void on_low_S_Yel_trackbar(int, void *)
+{
+    low_SYel = cv::min(high_SYel-1, low_SYel);
+    cv::setTrackbarPos("Low S Yel", "Video", low_SYel);
+}
+static void on_high_S_Yel_trackbar(int, void *)
+{
+    high_SYel = cv::max(high_SYel, low_SYel+1);
+    cv::setTrackbarPos("High S Yel", "Video", high_SYel);
+}
+static void on_low_V_Yel_trackbar(int, void *)
+{
+    low_VYel = cv::min(high_VYel-1, low_VYel);
+    cv::setTrackbarPos("Low V Yel", "Video", low_VYel);
+}
+static void on_high_V_Yel_trackbar(int, void *)
+{
+    high_VYel = cv::max(high_VYel, low_VYel+1);
+    cv::setTrackbarPos("High V Yel", "Video", high_VYel);
+}
+//Diff params
+static void on_diffLeft_trackbar(int, void *)
+{
+    cv::setTrackbarPos("Diff Left", "Video", diffLeft);
+}
+static void on_diffRight_trackbar(int, void *)
+{
+    cv::setTrackbarPos("Diff Right", "Video", diffRight);
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -13,26 +98,54 @@ int main(int argc, char *argv[])
         std::cerr << "Can't open raspi camera." << std::endl;
         return -1;
     }
-    int iLowH = 170;
-    int iHighH = 179;
+    low_HRed = 170;
+    high_HRed = 179;
 
-    int iLowS = 150;
-    int iHighS = 255;
+    low_SRed = 150;
+    high_SRed = 255;
 
-    int iLowV = 60;
-    int iHighV = 255;
+    low_VRed = 60;
+    high_VRed = 255;
 
-    int iLowHY = 20;
-    int iHighHY = 80;
+    low_HYel = 20;
+    high_HYel = 80;
 
-    int iLowSY = 100;
-    int iHighSY = 255;
+    low_SYel = 100;
+    high_SYel = 255;
 
-    int iLowVY = 100;
-    int iHighVY = 255;
+    low_VYel = 100;
+    high_VYel = 255;
+
+    std::ifstream conf;
+    conf.open("config.txt");
+    if (conf.is_open())
+    {
+        conf >> low_HRed >> high_HRed >> low_SRed >> high_SRed >> low_VRed >> high_VRed;
+        conf >> low_HYel >> high_HYel >> low_SYel >> high_SYel >> low_VYel >> high_VYel;
+        conf >> diffLeft >> diffRight;
+        conf.close();
+    }
 
     cv::namedWindow("Video", cv::WINDOW_NORMAL);
     cv::resizeWindow("Video", 1280, 720);
+    
+        // Trackbars to set thresholds for HSV values
+    cv::createTrackbar("Low H Red", "Video", &low_HRed, max_value_H, on_low_H_Red_trackbar);
+    cv::createTrackbar("High H Red", "Video", &high_HRed, max_value_H, on_high_H_Red_trackbar);
+    cv::createTrackbar("Low S Red", "Video", &low_SRed, max_value, on_low_S_Red_trackbar);
+    cv::createTrackbar("High S Red", "Video", &high_SRed, max_value, on_high_S_Red_trackbar);
+    cv::createTrackbar("Low V Red", "Video", &low_VRed, max_value, on_low_V_Red_trackbar);
+    cv::createTrackbar("High V Red", "Video", &high_VRed, max_value, on_high_V_Red_trackbar);
+    
+    cv::createTrackbar("Low H Yel", "Video", &low_HYel, max_value_H, on_low_H_Yel_trackbar);
+    cv::createTrackbar("High H Yel", "Video", &high_HYel, max_value_H, on_high_H_Yel_trackbar);
+    cv::createTrackbar("Low S Yel", "Video", &low_SYel, max_value, on_low_S_Yel_trackbar);
+    cv::createTrackbar("High S Yel", "Video", &high_SYel, max_value, on_high_S_Yel_trackbar);
+    cv::createTrackbar("Low V Yel", "Video", &low_VYel, max_value, on_low_V_Yel_trackbar);
+    cv::createTrackbar("High V Yel", "Video", &high_VYel, max_value, on_high_V_Yel_trackbar);
+    cv::createTrackbar("diffLeft", "Video", &diffLeft, -300, on_diffLeft_trackbar);
+    cv::createTrackbar("diffRight", "Video", &diffRight, 300, on_diffRight_trackbar);
+    
     cv::Mat frame;
     int frameCounter = 0;
     for (;;)
@@ -47,10 +160,12 @@ int main(int argc, char *argv[])
         cv::Mat imgHSV;
         cv::cvtColor(frame, imgHSV, cv::COLOR_BGR2HSV);
         cv::Mat imgTreshRed;
-        cv::inRange(imgHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgTreshRed);
+        cv::inRange(imgHSV, cv::Scalar(low_HRed, low_SRed, low_VRed), cv::Scalar(high_HRed,
+                    high_SRed, high_VRed), imgTreshRed);
 
         cv::Mat imgTreshYel;
-        cv::inRange(imgHSV, cv::Scalar(iLowHY, iLowSY, iLowVY), cv::Scalar(iHighHY, iHighSY, iHighVY), imgTreshYel);
+        cv::inRange(imgHSV, cv::Scalar(low_HYel, low_SYel, low_VYel), cv::Scalar(high_HYel,
+                    high_SYel, high_VYel), imgTreshYel);
         
         
         //RED
@@ -163,13 +278,13 @@ int main(int argc, char *argv[])
         double diff = rightDist - leftDist;
         char order = 'S';
 
-        if (diff < -50)
+        if (diff < diffLeft)
         {
             order = 'L';
             cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
 
         }
-        else if (diff > 50)
+        else if (diff > diffRight)
         {
             order = 'R';
             cv::putText(frame, "Right", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
@@ -194,5 +309,23 @@ int main(int argc, char *argv[])
     }
     cam.release();
     cv::destroyWindow("Video");
-    return 1;
+    //Save config;
+    std::ofstream config;
+    config.open("config.txt");
+    config << low_HRed << std::endl;
+    config << high_HRed << std::endl;
+    config << low_SRed << std::endl;
+    config << high_SRed << std::endl;
+    config << low_VRed << std::endl;
+    config << high_VRed << std::endl;
+    config << low_HYel << std::endl;
+    config << high_HYel << std::endl;
+    config << low_SYel << std::endl;
+    config << high_SYel << std::endl;
+    config << low_VYel << std::endl;
+    config << high_VYel << std::endl;
+    config << diffLeft << std::endl;
+    config << diffRight << std::endl;
+    config.close();
+    return 0;
 }
