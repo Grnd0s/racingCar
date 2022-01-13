@@ -147,8 +147,8 @@ int main(int argc, char *argv[])
     cv::createTrackbar("High S Yel", "Config", nullptr, max_value, on_high_S_Yel_trackbar);
     cv::createTrackbar("Low V Yel", "Config", nullptr, max_value, on_low_V_Yel_trackbar);
     cv::createTrackbar("High V Yel", "Config", nullptr, max_value, on_high_V_Yel_trackbar);
-    cv::createTrackbar("diffLeft", "Config", nullptr, 300, on_diffLeft_trackbar);
-    cv::createTrackbar("diffRight", "Config", nullptr, 300, on_diffRight_trackbar);
+    cv::createTrackbar("diffLeft", "Config", nullptr, 500, on_diffLeft_trackbar);
+    cv::createTrackbar("diffRight", "Config", nullptr, 500, on_diffRight_trackbar);
 
     cv::setTrackbarPos("Low H Red", "Config", low_HRed);    
     cv::setTrackbarPos("High H Red", "Config", high_HRed);    
