@@ -19,72 +19,72 @@ int diffRight = 50;
 static void on_low_H_Red_trackbar(int, void *)
 {
     low_HRed = cv::min(high_HRed-1, low_HRed);
-    cv::setTrackbarPos("Low H Red", "Video", low_HRed);
+    cv::setTrackbarPos("Low H Red", "Config", low_HRed);
 }
 static void on_high_H_Red_trackbar(int, void *)
 {
     high_HRed = cv::max(high_HRed, low_HRed+1);
-    cv::setTrackbarPos("High H Red", "Video", high_HRed);
+    cv::setTrackbarPos("High H Red", "Config", high_HRed);
 }
 static void on_low_S_Red_trackbar(int, void *)
 {
     low_SRed = cv::min(high_SRed-1, low_SRed);
-    cv::setTrackbarPos("Low S Red", "Video", low_SRed);
+    cv::setTrackbarPos("Low S Red", "Config", low_SRed);
 }
 static void on_high_S_Red_trackbar(int, void *)
 {
     high_SRed = cv::max(high_SRed, low_SRed+1);
-    cv::setTrackbarPos("High S Red", "Video", high_SRed);
+    cv::setTrackbarPos("High S Red", "Config", high_SRed);
 }
 static void on_low_V_Red_trackbar(int, void *)
 {
     low_VRed = cv::min(high_VRed-1, low_VRed);
-    cv::setTrackbarPos("Low V Red", "Video", low_VRed);
+    cv::setTrackbarPos("Low V Red", "Config", low_VRed);
 }
 static void on_high_V_Red_trackbar(int, void *)
 {
     high_VRed = cv::max(high_VRed, low_VRed+1);
-    cv::setTrackbarPos("High V Red", "Video", high_VRed);
+    cv::setTrackbarPos("High V Red", "Config", high_VRed);
 }
 //Yellow Trackbar
 static void on_low_H_Yel_trackbar(int, void *)
 {
     low_HYel = cv::min(high_HYel-1, low_HYel);
-    cv::setTrackbarPos("Low H Yel", "Video", low_HYel);
+    cv::setTrackbarPos("Low H Yel", "Config", low_HYel);
 }
 static void on_high_H_Yel_trackbar(int, void *)
 {
     high_HYel = cv::max(high_HYel, low_HYel+1);
-    cv::setTrackbarPos("High H Yel", "Video", high_HYel);
+    cv::setTrackbarPos("High H Yel", "Config", high_HYel);
 }
 static void on_low_S_Yel_trackbar(int, void *)
 {
     low_SYel = cv::min(high_SYel-1, low_SYel);
-    cv::setTrackbarPos("Low S Yel", "Video", low_SYel);
+    cv::setTrackbarPos("Low S Yel", "Config", low_SYel);
 }
 static void on_high_S_Yel_trackbar(int, void *)
 {
     high_SYel = cv::max(high_SYel, low_SYel+1);
-    cv::setTrackbarPos("High S Yel", "Video", high_SYel);
+    cv::setTrackbarPos("High S Yel", "Config", high_SYel);
 }
 static void on_low_V_Yel_trackbar(int, void *)
 {
     low_VYel = cv::min(high_VYel-1, low_VYel);
-    cv::setTrackbarPos("Low V Yel", "Video", low_VYel);
+    cv::setTrackbarPos("Low V Yel", "Config", low_VYel);
 }
 static void on_high_V_Yel_trackbar(int, void *)
 {
     high_VYel = cv::max(high_VYel, low_VYel+1);
-    cv::setTrackbarPos("High V Yel", "Video", high_VYel);
+    cv::setTrackbarPos("High V Yel", "Config", high_VYel);
 }
 //Diff params
 static void on_diffLeft_trackbar(int, void *)
 {
-    cv::setTrackbarPos("Diff Left", "Video", diffLeft);
+    cv::setTrackbarPos("Diff Left", "Config", diffLeft);
 }
 static void on_diffRight_trackbar(int, void *)
 {
-    cv::setTrackbarPos("Diff Right", "Video", diffRight);
+    cv::setTrackbarPos("Diff Right", "Config", diffRight);
 }
 
 
@@ -125,26 +125,30 @@ int main(int argc, char *argv[])
         conf >> diffLeft >> diffRight;
         conf.close();
     }
+    
+    cv::namedWindow("Config", cv::WINDOW_AUTOSIZE);
+   // cv::resizeWindow("Config", 800, 720);
+    
 
     cv::namedWindow("Video", cv::WINDOW_NORMAL);
     cv::resizeWindow("Video", 1280, 720);
     
         // Trackbars to set thresholds for HSV values
-    cv::createTrackbar("Low H Red", "Video", nullptr, max_value_H, on_low_H_Red_trackbar);
-    cv::createTrackbar("High H Red", "Video",nullptr, max_value_H, on_high_H_Red_trackbar);
-    cv::createTrackbar("Low S Red", "Video", nullptr, max_value, on_low_S_Red_trackbar);
-    cv::createTrackbar("High S Red", "Video", nullptr, max_value, on_high_S_Red_trackbar);
-    cv::createTrackbar("Low V Red", "Video", nullptr, max_value, on_low_V_Red_trackbar);
-    cv::createTrackbar("High V Red", "Video", nullptr,max_value, on_high_V_Red_trackbar);
+    cv::createTrackbar("Low H Red", "Config", nullptr, max_value_H, on_low_H_Red_trackbar);
+    cv::createTrackbar("High H Red", "Config",nullptr, max_value_H, on_high_H_Red_trackbar);
+    cv::createTrackbar("Low S Red", "Config", nullptr, max_value, on_low_S_Red_trackbar);
+    cv::createTrackbar("High S Red", "Config", nullptr, max_value, on_high_S_Red_trackbar);
+    cv::createTrackbar("Low V Red", "Config", nullptr, max_value, on_low_V_Red_trackbar);
+    cv::createTrackbar("High V Red", "Config", nullptr,max_value, on_high_V_Red_trackbar);
     
-    cv::createTrackbar("Low H Yel", "Video", nullptr, max_value_H, on_low_H_Yel_trackbar);
-    cv::createTrackbar("High H Yel", "Video", nullptr, max_value_H, on_high_H_Yel_trackbar);
-    cv::createTrackbar("Low S Yel", "Video", nullptr, max_value, on_low_S_Yel_trackbar);
-    cv::createTrackbar("High S Yel", "Video", nullptr, max_value, on_high_S_Yel_trackbar);
-    cv::createTrackbar("Low V Yel", "Video", nullptr, max_value, on_low_V_Yel_trackbar);
-    cv::createTrackbar("High V Yel", "Video", nullptr, max_value, on_high_V_Yel_trackbar);
-    cv::createTrackbar("diffLeft", "Video", nullptr, 300, on_diffLeft_trackbar);
-    cv::createTrackbar("diffRight", "Video", nullptr, 300, on_diffRight_trackbar);
+    cv::createTrackbar("Low H Yel", "Config", nullptr, max_value_H, on_low_H_Yel_trackbar);
+    cv::createTrackbar("High H Yel", "Config", nullptr, max_value_H, on_high_H_Yel_trackbar);
+    cv::createTrackbar("Low S Yel", "Config", nullptr, max_value, on_low_S_Yel_trackbar);
+    cv::createTrackbar("High S Yel", "Config", nullptr, max_value, on_high_S_Yel_trackbar);
+    cv::createTrackbar("Low V Yel", "Config", nullptr, max_value, on_low_V_Yel_trackbar);
+    cv::createTrackbar("High V Yel", "Config", nullptr, max_value, on_high_V_Yel_trackbar);
+    cv::createTrackbar("diffLeft", "Config", nullptr, 300, on_diffLeft_trackbar);
+    cv::createTrackbar("diffRight", "Config", nullptr, 300, on_diffRight_trackbar);
     
     cv::Mat frame;
     int frameCounter = 0;
@@ -309,6 +313,7 @@ int main(int argc, char *argv[])
     }
     cam.release();
     cv::destroyWindow("Video");
+    cv::destroyWindow("Config");
     //Save config;
     std::ofstream config;
     config.open("config.txt");
