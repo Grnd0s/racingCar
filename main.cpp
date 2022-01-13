@@ -268,14 +268,9 @@ int main(int argc, char *argv[])
         {
             redX = 0;
             redY = frame.size().height/2;
+            redArea = 0;
         }
 
-        cv::circle(frame, cv::Point(redX, redY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
-        cv::putText(frame, "Left", cv::Point(redX, redY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
-
-       // std::cout << "dist: " << redDist << " max dist: " << maxDist  << "dv: " << static_cast<int>(5 * std::abs(redDist)/maxDist + 1) << std::endl;
-        cv::arrowedLine(frame, cv::Point(redX, redY), cv::Point(centerX, centerY), cv::Scalar(0, 0, 255), static_cast<int>(5 * redDist/maxDist + 1));
-         
 
 
         for (size_t idx = 0; idx < contoursYel.size(); idx++) {
@@ -302,8 +297,28 @@ int main(int argc, char *argv[])
         {
             yelX = frame.size().width;
             yelY = frame.size().height/2;
+            yelArea = 0;
         }
-
+        
+        if (redArea < yelArea/2)
+        {
+            redX = 0;
+            redY = frame.size().height/2;
+            redArea = 0;
+        }
+        else if (yelArea < redArea/2)
+        {
+            yelX = frame.size().width;
+            yelY = frame.size().height/2;
+            yelArea = 0;
+        }
+        
+        //Draw Red
+        cv::circle(frame, cv::Point(redX, redY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
+        cv::putText(frame, "Left", cv::Point(redX, redY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
+        cv::arrowedLine(frame, cv::Point(redX, redY), cv::Point(centerX, centerY), cv::Scalar(0, 0, 255), static_cast<int>(5 * redDist/maxDist + 1));
+         
+        //Draw Yellow
         cv::circle(frame, cv::Point(yelX, yelY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
         cv::putText(frame, "Right", cv::Point(yelX, yelY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
         
