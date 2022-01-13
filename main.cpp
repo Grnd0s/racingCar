@@ -12,7 +12,7 @@ int low_HRed = 0, low_SRed = 0, low_VRed = 0;
 int high_HRed = max_value_H, high_SRed = max_value, high_VRed = max_value;
 int low_HYel = 0, low_SYel = 0, low_VYel = 0;
 int high_HYel = max_value_H, high_SYel = max_value, high_VYel = max_value;
-int diffLeft = -50;
+int diffLeft = 50;
 int diffRight = 50;
 
 //Red Trackbar
@@ -130,21 +130,21 @@ int main(int argc, char *argv[])
     cv::resizeWindow("Video", 1280, 720);
     
         // Trackbars to set thresholds for HSV values
-    cv::createTrackbar("Low H Red", "Video", &low_HRed, max_value_H, on_low_H_Red_trackbar);
-    cv::createTrackbar("High H Red", "Video", &high_HRed, max_value_H, on_high_H_Red_trackbar);
-    cv::createTrackbar("Low S Red", "Video", &low_SRed, max_value, on_low_S_Red_trackbar);
-    cv::createTrackbar("High S Red", "Video", &high_SRed, max_value, on_high_S_Red_trackbar);
-    cv::createTrackbar("Low V Red", "Video", &low_VRed, max_value, on_low_V_Red_trackbar);
-    cv::createTrackbar("High V Red", "Video", &high_VRed, max_value, on_high_V_Red_trackbar);
+    cv::createTrackbar("Low H Red", "Video", nullptr, max_value_H, on_low_H_Red_trackbar);
+    cv::createTrackbar("High H Red", "Video",nullptr, max_value_H, on_high_H_Red_trackbar);
+    cv::createTrackbar("Low S Red", "Video", nullptr, max_value, on_low_S_Red_trackbar);
+    cv::createTrackbar("High S Red", "Video", nullptr, max_value, on_high_S_Red_trackbar);
+    cv::createTrackbar("Low V Red", "Video", nullptr, max_value, on_low_V_Red_trackbar);
+    cv::createTrackbar("High V Red", "Video", nullptr,max_value, on_high_V_Red_trackbar);
     
-    cv::createTrackbar("Low H Yel", "Video", &low_HYel, max_value_H, on_low_H_Yel_trackbar);
-    cv::createTrackbar("High H Yel", "Video", &high_HYel, max_value_H, on_high_H_Yel_trackbar);
-    cv::createTrackbar("Low S Yel", "Video", &low_SYel, max_value, on_low_S_Yel_trackbar);
-    cv::createTrackbar("High S Yel", "Video", &high_SYel, max_value, on_high_S_Yel_trackbar);
-    cv::createTrackbar("Low V Yel", "Video", &low_VYel, max_value, on_low_V_Yel_trackbar);
-    cv::createTrackbar("High V Yel", "Video", &high_VYel, max_value, on_high_V_Yel_trackbar);
-    cv::createTrackbar("diffLeft", "Video", &diffLeft, -300, on_diffLeft_trackbar);
-    cv::createTrackbar("diffRight", "Video", &diffRight, 300, on_diffRight_trackbar);
+    cv::createTrackbar("Low H Yel", "Video", nullptr, max_value_H, on_low_H_Yel_trackbar);
+    cv::createTrackbar("High H Yel", "Video", nullptr, max_value_H, on_high_H_Yel_trackbar);
+    cv::createTrackbar("Low S Yel", "Video", nullptr, max_value, on_low_S_Yel_trackbar);
+    cv::createTrackbar("High S Yel", "Video", nullptr, max_value, on_high_S_Yel_trackbar);
+    cv::createTrackbar("Low V Yel", "Video", nullptr, max_value, on_low_V_Yel_trackbar);
+    cv::createTrackbar("High V Yel", "Video", nullptr, max_value, on_high_V_Yel_trackbar);
+    cv::createTrackbar("diffLeft", "Video", nullptr, 300, on_diffLeft_trackbar);
+    cv::createTrackbar("diffRight", "Video", nullptr, 300, on_diffRight_trackbar);
     
     cv::Mat frame;
     int frameCounter = 0;
@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
         double diff = rightDist - leftDist;
         char order = 'S';
 
-        if (diff < diffLeft)
+        if (diff < diffLeft * -1)
         {
             order = 'L';
             cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
