@@ -4,7 +4,7 @@
 #include <opencv2/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 
-#define FRAME_RATE 10
+#define FRAME_RATE 5
 
 const int max_value_H = 360/2;
 const int max_value = 255;
@@ -332,11 +332,11 @@ int main(int argc, char *argv[])
         double diffArea = yelArea - redArea;
         if (diffArea > 60000)
         {
-            diff += diffRight;
+            diff -= diffLeft * 2;
         }
         else if (diffArea < -60000)
         {
-            diff -= diffLeft;
+            diff += diffRight * 2;
         }
         char order = 'S';
 
