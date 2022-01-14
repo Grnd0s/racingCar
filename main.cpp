@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
         }
         
         double checkArea = redArea/yelArea;
-        double checkAreaRatio = 0.75;
+        double checkAreaRatio = 0.60;
         if (checkArea < checkAreaRatio)
         {
             redX = 0;
