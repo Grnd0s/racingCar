@@ -354,6 +354,7 @@ int main(int argc, char *argv[])
         cv::imshow("Video", frame);
         if (cv::waitKey(33) != -1)
         {
+            std::cout << std::abs(diff) << 'S' << std::endl;
             break;
         }
         frameCounter++;
