@@ -325,11 +325,18 @@ int main(int argc, char *argv[])
         
         cv::arrowedLine(frame, cv::Point(yelX, yelY), cv::Point(centerX, centerY), cv::Scalar(30, 255, 255), static_cast<int>(5 * std::abs(yelDist)/maxDist + 1));
 
-        double rightDist = std::sqrt(std::pow(centerX - yelX, 2) + std::pow(centerY - yelY, 2)) +
-            yelArea;
-        double leftDist = std::sqrt(std::pow(centerX - redX, 2) + std::pow(centerY - redY, 2)) +
-            redArea;
+        double rightDist = std::sqrt(std::pow(centerX - yelX, 2) + std::pow(centerY - yelY, 2));
+        double leftDist = std::sqrt(std::pow(centerX - redX, 2) + std::pow(centerY - redY, 2));
         double diff = rightDist - leftDist;
+        double diffArea = yelArea - redArea;
+        if (diffArea > 60000)
+        {
+            diff += diffRight;
+        }
+        else if (diffArea < -60000)
+        {
+            diff -= diffLeft;
+        }
         char order = 'S';
 
         if (diff < diffLeft * -1)
