@@ -300,19 +300,20 @@ int main(int argc, char *argv[])
             yelArea = 0;
         }
         
-        if (redArea < yelArea/2)
+        double checkArea = redArea/yelArea;
+        double checkAreaRatio = 0.75;
+        if (checkArea < checkAreaRatio)
         {
             redX = 0;
             redY = frame.size().height/2;
             redArea = 0;
         }
-        else if (yelArea < redArea/2)
+        else if (checkArea < 1/checkAreaRatio)
         {
             yelX = frame.size().width;
             yelY = frame.size().height/2;
             yelArea = 0;
         }
-        
         //Draw Red
         cv::circle(frame, cv::Point(redX, redY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
         cv::putText(frame, "Left", cv::Point(redX, redY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
