@@ -324,7 +324,8 @@ int main(int argc, char *argv[])
         cv::putText(frame, "Right", cv::Point(yelX, yelY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
         
         cv::arrowedLine(frame, cv::Point(yelX, yelY), cv::Point(centerX, centerY), cv::Scalar(30, 255, 255), static_cast<int>(5 * std::abs(yelDist)/maxDist + 1));
-
+        if (frameCounter % FRAME_RATE == 0)
+        {
         double rightDist = std::sqrt(std::pow(centerX - yelX, 2) + std::pow(centerY - yelY, 2));
         double leftDist = std::sqrt(std::pow(centerX - redX, 2) + std::pow(centerY - redY, 2));
         double diff = rightDist - leftDist;
@@ -356,15 +357,13 @@ int main(int argc, char *argv[])
             cv::putText(frame, "Forward", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
         }
 
-        if (frameCounter % FRAME_RATE == 0)
-        {
-            std::cout << std::abs(diff) << order << std::endl;
+        std::cout << std::abs(diff) << order << std::endl;
+        
         }
-
         cv::imshow("Video", frame);
         if (cv::waitKey(33) != -1)
         {
-            std::cout << std::abs(diff) << 'S' << std::endl;
+            std::cout << "0.0" << 'S' << std::endl;
             break;
         }
         frameCounter++;
