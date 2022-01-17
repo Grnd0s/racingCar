@@ -1,0 +1,17 @@
+VOIR - Car Detection
+Take a video as argument and display order to the racing car based on red and yellow plot
+
+Build:
+mkdir build && cd build/
+cmake ..
+make
+
+Run:
+Usage: ./detection <path_to_vid>
+
+
+
+Pierre Verhaeghe
+Thomas Lemaitre
+Kiran Krishna Krishnaswamy
+Tan Khanh Pham
