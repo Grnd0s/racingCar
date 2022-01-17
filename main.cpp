@@ -1,6 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
+#define FRAME_RATE 5
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +29,12 @@ int main(int argc, char *argv[])
 
     int iLowVY = 100;
     int iHighVY = 255;
+
+    //S -> Stop, F -> Forward, L -> Left, R -> Right
+    char order = 'S';
+    int diffLeft = 50;
+    int diffRight = 50;
+    int frameCounter = 0;
 
     cv::namedWindow("Video", cv::WINDOW_FULLSCREEN);
     cv::Mat frame;
@@ -114,12 +121,7 @@ int main(int argc, char *argv[])
             redY = frame.size().height/2;
         }
 
-        cv::circle(frame, cv::Point(redX, redY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
-        cv::putText(frame, "Left", cv::Point(redX, redY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
-
-       // std::cout << "dist: " << redDist << " max dist: " << maxDist  << "dv: " << static_cast<int>(5 * std::abs(redDist)/maxDist + 1) << std::endl;
-        cv::arrowedLine(frame, cv::Point(redX, redY), cv::Point(centerX, centerY), cv::Scalar(0, 0, 255), static_cast<int>(5 * redDist/maxDist + 1));
-         
+       
 
 
         for (size_t idx = 0; idx < contoursYel.size(); idx++) {
@@ -147,55 +149,87 @@ int main(int argc, char *argv[])
             yelX = frame.size().width;
             yelY = frame.size().height/2;
         }
-
+        
+        double checkArea = redArea/yelArea;
+        double checkAreaRatio = 0.60;
+        if (checkArea < checkAreaRatio)
+        {
+            redX = 0;
+            redY = frame.size().height/2;
+            redArea = 0;
+        }
+        else if (yelArea/redArea < checkAreaRatio)
+        {
+            yelX = frame.size().width;
+            yelY = frame.size().height/2;
+            yelArea = 0;
+        }
+        
+        //Draw Red
+        cv::circle(frame, cv::Point(redX, redY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
+        cv::putText(frame, "Left", cv::Point(redX, redY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
+        cv::arrowedLine(frame, cv::Point(redX, redY), cv::Point(centerX, centerY), cv::Scalar(0, 0, 255), static_cast<int>(5 * redDist/maxDist + 1));
+         
+        //Draw Yellow
         cv::circle(frame, cv::Point(yelX, yelY), 7, cv::Scalar(0, 0, 0), cv::FILLED);
         cv::putText(frame, "Right", cv::Point(yelX, yelY + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 255, 255), 1.5);
-        //std::cout << "dist: " << yelDist << " max dist: " << maxDist  << "dv: " << static_cast<int>(5 * std::abs(yelDist)/maxDist + 1) << std::endl;
-        
         cv::arrowedLine(frame, cv::Point(yelX, yelY), cv::Point(centerX, centerY), cv::Scalar(30, 255, 255), static_cast<int>(5 * std::abs(yelDist)/maxDist + 1));
 
-       //std::cout << "Left: " << redDist << " Right: " << yelDist << std::endl;
         double rightDist = std::sqrt(std::pow(centerX - yelX, 2) + std::pow(centerY - yelY, 2));
         double leftDist = std::sqrt(std::pow(centerX - redX, 2) + std::pow(centerY - redY, 2));
-        /*if (redDist > 250 && rightDist > 250)
-        {
-            std::cout << "Forward";
-        }
-        else if (redDist > 250 && yelDist < 250)
-        {
-            std::cout << "Left";
-        }
-        else if (redDist < 250 && yelDist > 250)
-        {
-            std::cout << "Right";
-        }
-        std::cout << ": " << ((frame.size().width - redDist) + (frame.size().width - yelDist)) / 100 << std::endl;
-        */
+        
         double diff = rightDist - leftDist;
-        std::cout << "Dist: " << diff << " ";
-        if (diff < -50)
+        double diffArea = yelArea - redArea;
+        
+        if (diffArea > 60000)
         {
-            std::cout << "Left" << std::endl;
-            cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+            diff -= diffLeft;
+        }
+        else if (diffArea < -60000)
+        {
+            diff += diffRight;
+        }
+        if (diff < diffLeft * -1)
+        {
+            order = 'L';
 
         }
-        else if (diff > 50)
+        else if (diff > diffRight)
         {
-            std::cout << "Right" << std::endl;
-            cv::putText(frame, "Right", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+            order = 'R';
         }
         else
         {
-            std::cout << "Forward" << std::endl;
-            cv::putText(frame, "Forward", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+            order = 'F';
         }
 
+        switch (order)
+        {
+            case 'F':
+                cv::putText(frame, "Forward", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+                break;
+            case 'L':
+                cv::putText(frame, "Left", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+                break;
+            case 'R':
+                cv::putText(frame, "Right", cv::Point(centerX - 50, centerY + 200), cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(0, 0, 0), 2);
+                break;
+            default:
+                break;
+        };
+
+        if (frameCounter % FRAME_RATE == 0 )
+        {
+            std::cout << std::abs(diff) << order << std::endl;
+        }
         cv::imshow("Video", frame);
         if (cv::waitKey(33) != -1)
         {
+            std::cout << "0.0S" << std::endl;
             break;
         }
+        frameCounter++;
     }
     cv::destroyWindow("Video");
-    return 1;
+    return 0;
 }
